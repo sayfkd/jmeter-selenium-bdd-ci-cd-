@@ -1,75 +1,54 @@
 pipeline {
-    agent {
-        docker {
-            image 'alpine/jmeter'
-            args '-v $PWD:/tests' // pour monter ton répertoire si besoin
-        }
-    }
+    agent { docker { image 'maven:3.9.6-eclipse-temurin-17' 
+    args '--entrypoint=""'}}  // Utilisation de l'image Maven
 
     environment {
-        JMETER_TEST_FILE = "src/test/jmeter/SQL.jmx"
-        REPORT_DIR = "jmeter-report"
+        DISPLAY = ':99'  // Requis pour exécuter les tests Selenium avec un serveur X virtuel
     }
 
     stages {
-        stage("Préparation") {
+        stage('Checkout Code') {
             steps {
-                echo "📦 Nettoyage du projet"
-                sh "mkdir -p ${REPORT_DIR}"
+                git 'https://ton-repo.git'  // Remplace avec l'URL de ton repo
             }
         }
 
-       stage("Run JMeter Tests") {
-    steps {
-        echo "🚀 Vérification du fichier JMX et exécution des tests JMeter..."
-
-        // Affiche le contenu du dossier pour debug
-        sh "echo '📂 Contenu de test/jmeter :' && ls -l src/test"
-
-        // Vérifie si le fichier existe, sinon erreur explicite
-        // sh """
-        //     if [ ! -f ${JMETER_TEST_FILE} ]; then
-        //         echo '❌ Le fichier ${JMETER_TEST_FILE} est introuvable !'
-        //         exit 1
-        //     fi
-        // """
-        sh "mvn clean verify"
-        // Test de la version JMeter (sanity check)
-        sh "echo '✅ JMeter version :' && jmeter -v"
-
-        // Lancement du test JMeter
-        sh """
-            jmeter -n -t ${JMETER_TEST_FILE}
-        """
-    }
-}
-
-
-        stage("Archive Report") {
+        stage('Build & Dependencies') {
             steps {
-                echo "🗂 Archivage du rapport JMeter..."
-                archiveArtifacts artifacts: "${REPORT_DIR}/**", fingerprint: true
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "${REPORT_DIR}/html",
-                    reportFiles: 'index.html',
-                    reportName: "JMeter Report"
-                ])
+                sh 'mvn clean install -DskipTests'  // Compile le projet sans exécuter les tests
             }
         }
-    }
 
-    post {
-        always {
-            echo "✅ Pipeline terminée"
+        stage('Start Selenium Grid') {
+            steps {
+                sh 'docker-compose up -d'  // Lancer Selenium Grid avec Docker Compose (optionnel)
+                sh 'sleep 10'  // Attendre que Selenium Grid démarre
+            }
         }
-        success {
-            echo "🎉 Tests JMeter exécutés avec succès"
+
+        stage('Run Selenium Tests') {
+            steps {
+                sh 'mvn test -Dtest=**/*SeleniumTest*'  // Exécuter uniquement les tests Selenium
+            }
         }
-        failure {
-            echo "❌ Échec lors de l'exécution des tests JMeter"
+
+        stage('Run JMeter Tests') {
+            steps {
+                sh 'mvn jmeter:jmeter'  // Lancer les tests JMeter avec Maven
+            }
+        }
+
+        stage('Publish JMeter Report') {
+            steps {
+                archiveArtifacts artifacts: '**/target/jmeter/results/*.jtl', fingerprint: true
+                archiveArtifacts artifacts: '**/target/jmeter/results/*.log', fingerprint: true
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                sh 'docker-compose down'  // Arrêter Selenium Grid si utilisé
+            }
         }
     }
 }
