@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="TesteChargePlan">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Plan de test departements">
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables pré-définies">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Front  Test">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Groupe d&apos;unités Dep_Api">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -18,74 +20,26 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <com.googlecode.jmeter.plugins.webdriver.config.RemoteDriverConfig guiclass="com.googlecode.jmeter.plugins.webdriver.config.gui.RemoteDriverConfigGui" testclass="com.googlecode.jmeter.plugins.webdriver.config.RemoteDriverConfig" testname="jp@gc - Remote Driver Config" enabled="true">
-          <boolProp name="WebDriverConfig.acceptinsecurecerts">false</boolProp>
-          <boolProp name="WebDriverConfig.reset_per_iteration">false</boolProp>
-          <boolProp name="WebDriverConfig.headless">false</boolProp>
-          <boolProp name="WebDriverConfig.maximize_browser">true</boolProp>
-          <stringProp name="ChromeDriverConfig.additional_args"></stringProp>
-          <stringProp name="ChromeDriverConfig.binary_path"></stringProp>
-          <stringProp name="EdgeDriverConfig.additional_args"></stringProp>
-          <stringProp name="EdgeDriverConfig.binary_path"></stringProp>
-          <boolProp name="FirefoxDriverConfig.general.useragent.override.enabled">false</boolProp>
-          <boolProp name="FirefoxDriverConfig.network.negotiate-auth.allow-insecure-ntlm-v1">false</boolProp>
-          <collectionProp name="FirefoxDriverConfig.general.extensions"/>
-          <collectionProp name="FirefoxDriverConfig.general.preferences"/>
-          <intProp name="InternetExplorerDriverConfig.file_upload_dialog_timeout">1000</intProp>
-          <boolProp name="InternetExplorerDriverConfig.ensure_clean_session">false</boolProp>
-          <boolProp name="InternetExplorerDriverConfig.ignore_protected_mode">false</boolProp>
-          <boolProp name="InternetExplorerDriverConfig.silent">false</boolProp>
-          <stringProp name="InternetExplorerDriverConfig.initial_browser_url">https://www.bing.com/</stringProp>
-          <stringProp name="WebDriverConfig.proxy_type">SYSTEM</stringProp>
-          <stringProp name="WebDriverConfig.proxy_pac_url"></stringProp>
-          <stringProp name="WebDriverConfig.http_host"></stringProp>
-          <intProp name="WebDriverConfig.http_port">8080</intProp>
-          <boolProp name="WebDriverConfig.use_http_for_all_protocols">true</boolProp>
-          <stringProp name="WebDriverConfig.https_host"></stringProp>
-          <intProp name="WebDriverConfig.https_port">8080</intProp>
-          <boolProp name="WebDriverConfig.use_ftp_proxy">true</boolProp>
-          <stringProp name="WebDriverConfig.ftp_host"></stringProp>
-          <intProp name="WebDriverConfig.ftp_port">8080</intProp>
-          <boolProp name="WebDriverConfig.use_socks_proxy">true</boolProp>
-          <stringProp name="WebDriverConfig.socks_host"></stringProp>
-          <intProp name="WebDriverConfig.socks_port">8080</intProp>
-          <stringProp name="WebDriverConfig.no_proxy">localhost</stringProp>
-          <stringProp name="WebDriverConfig.custom_capabilites"></stringProp>
-          <stringProp name="RemoteDriverConfig.general.selenium.grid.url">http://192.168.1.119:4444</stringProp>
-          <stringProp name="RemoteDriverConfig.general.selenium.capability">CHROME</stringProp>
-          <boolProp name="RemoteDriverConfig.general.selenium.file.detector">false</boolProp>
-        </com.googlecode.jmeter.plugins.webdriver.config.RemoteDriverConfig>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Requête HTTP" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Variables pré-définies">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">192.168.1.95</stringProp>
+          <stringProp name="HTTPSampler.port">3000</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
         <hashTree/>
-        <com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler guiclass="com.googlecode.jmeter.plugins.webdriver.sampler.gui.WebDriverSamplerGui" testclass="com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler" testname="jp@gc - WebDriver Sampler">
-          <stringProp name="WebDriverSampler.script">WDS.sampleResult.sampleStart()
-WDS.browser = new org.openqa.selenium.chrome.ChromeDriver()
-WDS.browser.get(&quot;https://www.saucedemo.com/&quot;)
-
-var usernameInput = WDS.browser.findElement(org.openqa.selenium.By.id(&quot;user-name&quot;))
-usernameInput.sendKeys(&quot;standard_user&quot;)
-
-var passwordInput = WDS.browser.findElement(org.openqa.selenium.By.id(&quot;password&quot;))
-passwordInput.sendKeys(&quot;secret_sauce&quot;)
-
-
-var loginButton = WDS.browser.findElement(org.openqa.selenium.By.id(&quot;login-button&quot;))
-loginButton.click()
-
-WDS.browser.close()
-
-var productLabel = WDS.browser.findElement(org.openqa.selenium.By.className(&quot;title&quot;))
-if (productLabel.getText() === &quot;Products&quot;) {
-    WDS.log.info(&quot;Connexion reussite&quot;)
-} else {
-    WDS.log.error(&quot;Erreur&quot;)
-}
-
-WDS.sampleResult.sampleEnd()</stringProp>
-          <stringProp name="WebDriverSampler.parameters"></stringProp>
-          <stringProp name="WebDriverSampler.language">groovy</stringProp>
-        </com.googlecode.jmeter.plugins.webdriver.sampler.WebDriverSampler>
-        <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Arbre de résultats">
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="Tableau de résultats" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -123,7 +77,7 @@ WDS.sampleResult.sampleEnd()</stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="SQL">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Groupe d&apos;unités Dep_BDD">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -134,26 +88,76 @@ WDS.sampleResult.sampleEnd()</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="Configuration de connexion JDBC">
+        <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="Configuration de connexion JDBC" enabled="true">
           <boolProp name="autocommit">true</boolProp>
           <stringProp name="checkQuery"></stringProp>
           <stringProp name="connectionAge">5000</stringProp>
           <stringProp name="connectionProperties"></stringProp>
-          <stringProp name="dataSource">myDB</stringProp>
+          <stringProp name="dataSource">BDDJmeter</stringProp>
           <stringProp name="dbUrl">jdbc:mysql://192.168.1.95:3306/employees</stringProp>
           <stringProp name="driver">com.mysql.jdbc.Driver</stringProp>
-          <stringProp name="initQuery">select * from departments</stringProp>
+          <stringProp name="initQuery"></stringProp>
           <boolProp name="keepAlive">true</boolProp>
-          <stringProp name="password">arnaud</stringProp>
+          <stringProp name="password">ahmed</stringProp>
           <stringProp name="poolMax">0</stringProp>
           <boolProp name="preinit">false</boolProp>
           <stringProp name="timeout">10000</stringProp>
           <stringProp name="transactionIsolation">DEFAULT</stringProp>
           <stringProp name="trimInterval">60000</stringProp>
-          <stringProp name="username">arnaud</stringProp>
+          <stringProp name="username">ahmed</stringProp>
         </JDBCDataSource>
         <hashTree/>
-        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="Tableau de résultats">
+        <JDBCSampler guiclass="TestBeanGUI" testclass="JDBCSampler" testname="getAll">
+          <stringProp name="dataSource">BDDJmeter</stringProp>
+          <stringProp name="query">Select * from employees</stringProp>
+          <stringProp name="queryArguments"></stringProp>
+          <stringProp name="queryArgumentsTypes"></stringProp>
+          <stringProp name="queryTimeout"></stringProp>
+          <stringProp name="queryType">Select Statement</stringProp>
+          <stringProp name="resultSetHandler">Store as String</stringProp>
+          <stringProp name="resultSetMaxRows"></stringProp>
+          <stringProp name="resultVariable"></stringProp>
+          <stringProp name="variableNames"></stringProp>
+        </JDBCSampler>
+        <hashTree/>
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="Tableau de résultats" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Arbre de résultats" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
