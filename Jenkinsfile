@@ -1,6 +1,9 @@
 pipeline {
-    agent { docker { image 'maven:3.9.6-eclipse-temurin-17' 
-    args '--entrypoint=""'}}  // Utilisation de l'image Maven
+    agent { docker { 
+        image 'maven:3.9.6-eclipse-temurin-17' 
+        args '--entrypoint=""'
+        
+        }}  // Utilisation de l'image Maven
 
     environment {
         DISPLAY = ':99'  // Requis pour exécuter les tests Selenium avec un serveur X virtuel
